@@ -123,7 +123,7 @@
       <button class="nav-item" data-tab="signature"><span class="nav-icon">&#x270D;</span> My signature</button>
       <button class="nav-item" data-tab="apikey"><span class="nav-icon">&#x1F511;</span> API key</button>
     </nav>
-    <div class="sidebar-footer">info@excavatorsrus.com<br>+1 425-800-5260</div>
+    <div class="sidebar-footer"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="234a4d454c63465b40425542574c51505156500d404c4e">[email&#160;protected]</a><br>+1 425-800-5260</div>
   </aside>
 
   <main class="main">
@@ -245,7 +245,7 @@
 </div>
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var WH = {
   kent:    { label: 'Kent, WA',      addr: '5801 S 212th St, Kent, WA 98032',         email: 'kent.wa@gmail.com' },
   santa:   { label: 'Santa Ana, CA', addr: '2602 S Halladay St, Santa Ana, CA 92705', email: 'santana.ca@gmail.com' },
@@ -439,7 +439,7 @@ function importFromContract() {
     var base64 = reader.result.split(',')[1];
     fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
@@ -531,12 +531,4 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('btn-import').addEventListener('click', importFromContract);
   document.getElementById('btn-save-apikey').addEventListener('click', saveApiKey);
   document.getElementById('btn-clear-sig').addEventListener('click', clearSig);
-  document.getElementById('btn-save-sig').addEventListener('click', saveSig);
-  document.getElementById('modal-bg').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
-  renderOrders();
-});
-</script>
-</body>
-</html>
+  document.getElem
