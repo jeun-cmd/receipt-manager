@@ -8,148 +8,51 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #F5F2ED;
-    --surface: #FFFFFF;
-    --surface2: #EEEAE3;
-    --border: #D8D3C8;
-    --border2: #C4BFB2;
-    --text: #1A1814;
-    --text2: #6B6660;
-    --text3: #9C9790;
-    --accent: #C8440A;
-    --accent-bg: #FDF0EB;
-    --accent-border: #E8A080;
-    --success: #1A6B3A;
-    --success-bg: #EAF5EF;
-    --success-border: #80C8A0;
-    --warning: #8B5E00;
-    --warning-bg: #FFF8E6;
-    --warning-border: #F0C060;
-    --info: #1A4A8B;
-    --info-bg: #EBF2FD;
-    --info-border: #80A8E8;
-    --radius: 6px;
-    --radius-lg: 10px;
-    --font: 'Syne', sans-serif;
-    --mono: 'IBM Plex Mono', monospace;
+    --bg: #F5F2ED; --surface: #FFFFFF; --surface2: #EEEAE3;
+    --border: #D8D3C8; --border2: #C4BFB2; --text: #1A1814;
+    --text2: #6B6660; --text3: #9C9790; --accent: #C8440A;
+    --accent-bg: #FDF0EB; --accent-border: #E8A080;
+    --success: #1A6B3A; --success-bg: #EAF5EF; --success-border: #80C8A0;
+    --warning: #8B5E00; --warning-bg: #FFF8E6; --warning-border: #F0C060;
+    --info: #1A4A8B; --info-bg: #EBF2FD; --info-border: #80A8E8;
+    --radius: 6px; --radius-lg: 10px;
+    --font: 'Syne', sans-serif; --mono: 'IBM Plex Mono', monospace;
   }
-
-  body {
-    font-family: var(--font);
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-
-  .layout {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    min-height: 100vh;
-  }
-
-  /* Sidebar */
-  .sidebar {
-    background: var(--text);
-    color: #F5F2ED;
-    padding: 2rem 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-  }
-
+  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.5; }
+  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+  .sidebar { background: var(--text); color: #F5F2ED; padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 2rem; position: sticky; top: 0; height: 100vh; }
   .logo-area { border-bottom: 0.5px solid rgba(255,255,255,0.15); padding-bottom: 1.5rem; }
-  .logo-icon {
-    width: 36px; height: 36px;
-    background: var(--accent);
-    border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
+  .logo-icon { width: 36px; height: 36px; background: var(--accent); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 10px; }
   .logo-title { font-size: 14px; font-weight: 600; letter-spacing: 0.03em; line-height: 1.3; }
   .logo-sub { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 3px; font-family: var(--mono); }
-
   .nav { display: flex; flex-direction: column; gap: 2px; }
-  .nav-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 12px;
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-size: 13px;
-    color: rgba(255,255,255,0.55);
-    transition: all 0.15s;
-    border: none; background: transparent; text-align: left; width: 100%;
-  }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: var(--radius); cursor: pointer; font-size: 13px; color: rgba(255,255,255,0.55); transition: all 0.15s; border: none; background: transparent; text-align: left; width: 100%; }
   .nav-item:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.07); }
   .nav-item.active { color: #fff; background: rgba(255,255,255,0.12); }
   .nav-icon { font-size: 15px; width: 18px; text-align: center; }
-
   .nav-section-label { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; text-transform: uppercase; font-family: var(--mono); padding: 0 12px; margin-top: 0.5rem; }
-
   .sidebar-footer { margin-top: auto; font-size: 11px; color: rgba(255,255,255,0.25); font-family: var(--mono); }
-
-  /* Main */
   .main { padding: 2rem 2.5rem; max-width: 860px; }
-
   .page-header { margin-bottom: 2rem; }
   .page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
   .page-subtitle { font-size: 13px; color: var(--text2); margin-top: 4px; font-family: var(--mono); }
-
-  /* Sections */
   .section { display: none; }
   .section.active { display: block; }
-
-  /* Cards */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    margin-bottom: 1rem;
-  }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1rem; }
   .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
   .card-title { font-size: 15px; font-weight: 600; }
-
-  /* Badges */
   .badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; font-family: var(--mono); letter-spacing: 0.03em; }
   .badge-pending { background: var(--warning-bg); color: var(--warning); border: 1px solid var(--warning-border); }
   .badge-ready   { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
   .badge-sent    { background: var(--info-bg);    color: var(--info);    border: 1px solid var(--info-border); }
-
-  /* Form */
   .field { margin-bottom: 14px; }
   label { font-size: 12px; font-weight: 600; color: var(--text2); display: block; margin-bottom: 5px; letter-spacing: 0.04em; text-transform: uppercase; font-family: var(--mono); }
-  input[type=text], input[type=email], select, textarea {
-    width: 100%; padding: 9px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 14px; font-family: var(--font);
-    background: var(--surface);
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  input[type=text], input[type=email], select { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; font-family: var(--font); background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; }
+  input:focus, select:focus { border-color: var(--accent); }
   input::placeholder { color: var(--text3); }
-
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-
-  /* Buttons */
-  .btn {
-    padding: 9px 18px; border-radius: var(--radius);
-    border: 1px solid var(--border2);
-    background: var(--surface); color: var(--text);
-    font-size: 13px; font-family: var(--font); font-weight: 500;
-    cursor: pointer; transition: all 0.15s;
-  }
+  .btn { padding: 9px 18px; border-radius: var(--radius); border: 1px solid var(--border2); background: var(--surface); color: var(--text); font-size: 13px; font-family: var(--font); font-weight: 500; cursor: pointer; transition: all 0.15s; }
   .btn:hover { background: var(--surface2); }
   .btn-primary { background: var(--text); color: #fff; border-color: var(--text); }
   .btn-primary:hover { background: #333; }
@@ -160,109 +63,37 @@
   .btn-danger { background: #fff; color: #c0392b; border-color: #e8a0a0; }
   .btn-danger:hover { background: #fdf0f0; }
   .btn-sm { padding: 6px 14px; font-size: 12px; }
-
   .row { display: flex; gap: 8px; align-items: center; }
   .divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
-
-  /* Order card */
   .order-meta { font-size: 13px; color: var(--text2); margin-bottom: 10px; font-family: var(--mono); }
   .order-meta span { color: var(--text3); }
-
-  .vin-box {
-    background: var(--surface2);
-    border-radius: var(--radius);
-    padding: 12px;
-    margin-bottom: 12px;
-  }
+  .vin-box { background: var(--surface2); border-radius: var(--radius); padding: 12px; margin-bottom: 12px; }
   .vin-box-label { font-size: 11px; color: var(--text2); font-family: var(--mono); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
-
-  /* Empty state */
   .empty { text-align: center; padding: 3rem; color: var(--text3); font-family: var(--mono); font-size: 13px; }
   .empty-icon { font-size: 32px; margin-bottom: 1rem; opacity: 0.4; }
-
-  /* Warehouse */
   .wh-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
   .wh-row:last-child { border-bottom: none; }
   .wh-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
   .wh-label { font-size: 14px; font-weight: 600; }
   .wh-addr { font-size: 12px; color: var(--text2); font-family: var(--mono); }
   .wh-email { font-size: 12px; color: var(--info); font-family: var(--mono); margin-left: auto; }
-
-  /* Signature */
-  #sig-canvas {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    cursor: crosshair;
-    display: block;
-    width: 100%;
-    background: var(--surface);
-    touch-action: none;
-  }
-
-  /* Modal */
-  .modal-bg {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.5); z-index: 100;
-    align-items: center; justify-content: center;
-    padding: 1rem;
-  }
+  #sig-canvas { border: 1px solid var(--border); border-radius: var(--radius); cursor: crosshair; display: block; width: 100%; background: var(--surface); touch-action: none; }
+  .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
   .modal-bg.open { display: flex; }
-  .modal {
-    background: var(--surface);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
-    padding: 1.75rem;
-    width: 90%; max-width: 580px;
-    max-height: 90vh; overflow-y: auto;
-  }
+  .modal { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 1.75rem; width: 90%; max-width: 580px; max-height: 90vh; overflow-y: auto; }
   .modal-title { font-size: 17px; font-weight: 700; margin-bottom: 1rem; }
-
-  /* Receipt preview */
-  .receipt-preview {
-    font-family: var(--mono);
-    font-size: 11px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 1.25rem;
-    white-space: pre-wrap;
-    color: var(--text);
-    margin-bottom: 1rem;
-    line-height: 1.7;
-    max-height: 340px;
-    overflow-y: auto;
-  }
-
-  /* Send preview */
+  .receipt-preview { font-family: var(--mono); font-size: 11px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; white-space: pre-wrap; color: var(--text); margin-bottom: 1rem; line-height: 1.7; max-height: 340px; overflow-y: auto; }
   .send-field { display: flex; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
   .send-field:last-child { border-bottom: none; }
   .send-label { color: var(--text2); font-family: var(--mono); min-width: 70px; font-size: 12px; }
-
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 1.5rem; right: 1.5rem;
-    background: var(--text); color: #fff;
-    padding: 10px 18px; border-radius: var(--radius);
-    font-size: 13px; font-family: var(--mono);
-    opacity: 0; transition: opacity 0.3s; z-index: 200;
-    pointer-events: none;
-  }
+  .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--text); color: #fff; padding: 10px 18px; border-radius: var(--radius); font-size: 13px; font-family: var(--mono); opacity: 0; transition: opacity 0.3s; z-index: 200; pointer-events: none; }
   .toast.show { opacity: 1; }
-
-  /* Stats bar */
   .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1rem 1.25rem;
-  }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1rem 1.25rem; }
   .stat-label { font-size: 11px; color: var(--text3); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; }
   .stat-val { font-size: 26px; font-weight: 700; margin-top: 2px; letter-spacing: -0.02em; }
-  .stat-val.accent { color: var(--accent); }
   .stat-val.success { color: var(--success); }
   .stat-val.warning { color: var(--warning); }
-
   @media (max-width: 640px) {
     .layout { grid-template-columns: 1fr; }
     .sidebar { position: static; height: auto; flex-direction: row; flex-wrap: wrap; padding: 1rem; gap: 1rem; }
@@ -270,35 +101,33 @@
     .nav { flex-direction: row; flex-wrap: wrap; }
     .sidebar-footer { display: none; }
     .main { padding: 1.25rem; }
-    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .grid2 { grid-template-columns: 1fr; }
     .stats-bar { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
-
 <div class="layout">
   <aside class="sidebar">
     <div class="logo-area">
-      <div class="logo-icon">🚜</div>
+      <div class="logo-icon">&#x1F69C;</div>
       <div class="logo-title">Excavators R Us LLC</div>
       <div class="logo-sub">receipt manager v1.0</div>
     </div>
     <nav class="nav">
       <div class="nav-section-label">Main</div>
-      <button class="nav-item active" onclick="switchTab('orders')"><span class="nav-icon">📋</span> Orders</button>
-      <button class="nav-item" onclick="switchTab('new')"><span class="nav-icon">＋</span> New order</button>
+      <button class="nav-item active" data-tab="orders"><span class="nav-icon">&#x1F4CB;</span> Orders</button>
+      <button class="nav-item" data-tab="new"><span class="nav-icon">+</span> New order</button>
       <div class="nav-section-label" style="margin-top:1rem;">Settings</div>
-      <button class="nav-item" onclick="switchTab('warehouses')"><span class="nav-icon">🏭</span> Warehouses</button>
-      <button class="nav-item" onclick="switchTab('signature')"><span class="nav-icon">✍️</span> My signature</button>
-      <button class="nav-item" onclick="switchTab('apikey')"><span class="nav-icon">🔑</span> API key</button>
+      <button class="nav-item" data-tab="warehouses"><span class="nav-icon">&#x1F3ED;</span> Warehouses</button>
+      <button class="nav-item" data-tab="signature"><span class="nav-icon">&#x270D;</span> My signature</button>
+      <button class="nav-item" data-tab="apikey"><span class="nav-icon">&#x1F511;</span> API key</button>
     </nav>
-    <div class="sidebar-footer"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="92fbfcf4fdd2f7eaf1f3e4f3e6fde0e1e0e7e1bcf1fdff">[email&#160;protected]</a><br>+1 425-800-5260</div>
+    <div class="sidebar-footer">info@excavatorsrus.com<br>+1 425-800-5260</div>
   </aside>
 
   <main class="main">
 
-    <!-- ORDERS -->
     <div id="tab-orders" class="section active">
       <div class="page-header">
         <div class="page-title">Orders</div>
@@ -312,28 +141,6 @@
       <div id="orders-list"></div>
     </div>
 
-    <!-- API KEY -->
-    <div id="tab-apikey" class="section">
-      <div class="page-header">
-        <div class="page-title">API key</div>
-        <div class="page-subtitle">Required for PDF contract auto-import</div>
-      </div>
-      <div class="card">
-        <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">To enable automatic extraction of customer info from your signed HL contracts, enter your Anthropic API key below. It is stored only in your browser — never sent anywhere except Anthropic's API.</p>
-        <div class="field">
-          <label>Anthropic API key</label>
-          <input type="text" id="api-key-input" placeholder="sk-ant-..." style="font-family:var(--mono); font-size:13px;">
-        </div>
-        <div class="row" style="justify-content:flex-end; gap:8px;">
-          <button class="btn btn-accent" onclick="saveApiKey()">Save key</button>
-        </div>
-        <div id="apikey-status" style="font-size:12px; color:var(--success); font-family:var(--mono); margin-top:8px; display:none;">✓ API key saved.</div>
-        <hr class="divider">
-        <p style="font-size:12px; color:var(--text3); font-family:var(--mono);">Don't have a key? Get one at <a href="https://console.anthropic.com" target="_blank" style="color:var(--info);">console.anthropic.com</a></p>
-      </div>
-    </div>
-
-    <!-- NEW ORDER -->
     <div id="tab-new" class="section">
       <div class="page-header">
         <div class="page-title">New order</div>
@@ -344,11 +151,10 @@
         <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">Upload your signed contract PDF — Claude will automatically extract and fill in all customer fields below.</p>
         <div class="row" style="gap:10px; flex-wrap:wrap;">
           <input type="file" id="contract-pdf" accept="application/pdf" style="font-size:13px; font-family:var(--mono); flex:1; min-width:200px;">
-          <button class="btn btn-accent" onclick="importFromContract()">Extract from PDF</button>
+          <button class="btn btn-accent" id="btn-import">Extract from PDF</button>
         </div>
         <div id="import-status" style="font-size:12px; font-family:var(--mono); margin-top:10px; display:none;"></div>
       </div>
-
       <div class="card">
         <div class="card-title" style="margin-bottom:1rem;">Customer info</div>
         <div class="field"><label>Customer name</label><input id="n-name" type="text" placeholder="e.g. John Reyes"></div>
@@ -361,7 +167,6 @@
           <div class="field"><label>City</label><input id="n-city" type="text" placeholder="City"></div>
           <div class="field"><label>State / Zip</label><input id="n-zip" type="text" placeholder="TX 77001"></div>
         </div>
-
         <hr class="divider">
         <div class="card-title" style="margin-bottom:1rem;">Dispatch warehouse</div>
         <div class="field">
@@ -374,23 +179,20 @@
             <option value="chicago">Chicago, IL – 3429 W 47th St, Chicago, IL 60632</option>
           </select>
         </div>
-
         <hr class="divider">
-        <div class="card-title" style="margin-bottom: 4px;">Machine details</div>
+        <div class="card-title" style="margin-bottom:4px;">Machine details</div>
         <p style="font-size:13px; color:var(--text2); margin-bottom:1rem; font-family:var(--mono);">Optional — fill now or later once warehouse confirms</p>
         <div class="grid2">
-          <div class="field"><label>Machine name & model</label><input id="n-machine" type="text" placeholder="e.g. CAT 320 Excavator"></div>
+          <div class="field"><label>Machine name &amp; model</label><input id="n-machine" type="text" placeholder="e.g. CAT 320 Excavator"></div>
           <div class="field"><label>VIN number</label><input id="n-vin" type="text" placeholder="e.g. 1HTMM21R4WH554306"></div>
         </div>
-
         <div class="row" style="justify-content:flex-end; margin-top:8px; gap:8px;">
-          <button class="btn" onclick="switchTab('orders')">Cancel</button>
-          <button class="btn btn-accent" onclick="addOrder()">Save order</button>
+          <button class="btn" id="btn-cancel">Cancel</button>
+          <button class="btn btn-accent" id="btn-save-order">Save order</button>
         </div>
       </div>
     </div>
 
-    <!-- WAREHOUSES -->
     <div id="tab-warehouses" class="section">
       <div class="page-header">
         <div class="page-title">Warehouses</div>
@@ -399,7 +201,6 @@
       <div class="card"><div id="wh-list"></div></div>
     </div>
 
-    <!-- SIGNATURE -->
     <div id="tab-signature" class="section">
       <div class="page-header">
         <div class="page-title">My signature</div>
@@ -409,133 +210,73 @@
         <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">Draw your signature in the box below using your mouse or finger.</p>
         <canvas id="sig-canvas" width="700" height="160"></canvas>
         <div class="row" style="margin-top:12px; justify-content:flex-end; gap:8px;">
-          <button class="btn btn-sm" onclick="clearSig()">Clear</button>
-          <button class="btn btn-sm btn-accent" onclick="saveSig()">Save signature</button>
+          <button class="btn btn-sm" id="btn-clear-sig">Clear</button>
+          <button class="btn btn-sm btn-accent" id="btn-save-sig">Save signature</button>
         </div>
-        <div id="sig-status" style="font-size:12px; color:var(--success); font-family:var(--mono); margin-top:8px; display:none;">✓ Signature saved and will be applied to all receipts.</div>
+        <div id="sig-status" style="font-size:12px; color:var(--success); font-family:var(--mono); margin-top:8px; display:none;">Signature saved and will be applied to all receipts.</div>
+      </div>
+    </div>
+
+    <div id="tab-apikey" class="section">
+      <div class="page-header">
+        <div class="page-title">API key</div>
+        <div class="page-subtitle">Required for PDF contract auto-import</div>
+      </div>
+      <div class="card">
+        <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">Enter your Anthropic API key to enable automatic extraction of customer info from signed HL contracts. Stored only in your browser.</p>
+        <div class="field">
+          <label>Anthropic API key</label>
+          <input type="text" id="api-key-input" placeholder="sk-ant-..." style="font-family:var(--mono); font-size:13px;">
+        </div>
+        <div class="row" style="justify-content:flex-end; gap:8px;">
+          <button class="btn btn-accent" id="btn-save-apikey">Save key</button>
+        </div>
+        <div id="apikey-status" style="font-size:12px; color:var(--success); font-family:var(--mono); margin-top:8px; display:none;">API key saved.</div>
+        <hr class="divider">
+        <p style="font-size:12px; color:var(--text3); font-family:var(--mono);">Get a key at <a href="https://console.anthropic.com" target="_blank" style="color:var(--info);">console.anthropic.com</a></p>
       </div>
     </div>
 
   </main>
 </div>
 
-<!-- Modal -->
 <div class="modal-bg" id="modal-bg">
   <div class="modal" id="modal-content"></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-const WH = {
+<script>
+var WH = {
   kent:    { label: 'Kent, WA',      addr: '5801 S 212th St, Kent, WA 98032',         email: 'kent.wa@gmail.com' },
   santa:   { label: 'Santa Ana, CA', addr: '2602 S Halladay St, Santa Ana, CA 92705', email: 'santana.ca@gmail.com' },
   houston: { label: 'Houston, TX',   addr: '4433 South Drive, Houston, TX 77053',      email: 'houston.tx@gmail.com' },
-  chicago: { label: 'Chicago, IL',   addr: '3429 W 47th St, Chicago, IL 60632',       email: 'chicago.il@gmail.com' },
+  chicago: { label: 'Chicago, IL',   addr: '3429 W 47th St, Chicago, IL 60632',       email: 'chicago.il@gmail.com' }
 };
 
-let orders = JSON.parse(localStorage.getItem('eru_orders') || '[]');
-let sigData = localStorage.getItem('eru_sig') || '';
-let drawing = false, ctx, lastX, lastY;
+var orders = JSON.parse(localStorage.getItem('eru_orders') || '[]');
+var sigData = localStorage.getItem('eru_sig') || '';
+var drawing = false, ctx, lastX, lastY;
 
 function save() { localStorage.setItem('eru_orders', JSON.stringify(orders)); }
 
-function saveApiKey() {
-  const key = document.getElementById('api-key-input').value.trim();
-  if (!key) { toast('Please enter your API key.'); return; }
-  localStorage.setItem('eru_api_key', key);
-  document.getElementById('apikey-status').style.display = 'block';
-  toast('API key saved!');
-}
-
-async function importFromContract() {
-  const apiKey = localStorage.getItem('eru_api_key');
-  if (!apiKey) {
-    toast('Please save your Anthropic API key first (Settings → API key).');
-    return;
-  }
-  const fileInput = document.getElementById('contract-pdf');
-  if (!fileInput.files.length) { toast('Please select a PDF file first.'); return; }
-  const file = fileInput.files[0];
-  const status = document.getElementById('import-status');
-  status.style.display = 'block';
-  status.style.color = 'var(--text2)';
-  status.textContent = '⏳ Reading contract and extracting customer info...';
-
-  try {
-    const base64 = await new Promise((res, rej) => {
-      const r = new FileReader();
-      r.onload = () => res(r.result.split(',')[1]);
-      r.onerror = () => rej(new Error('Failed to read file'));
-      r.readAsDataURL(file);
-    });
-
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64 } },
-            { type: 'text', text: `Extract the following customer information from this signed contract and return ONLY a valid JSON object with no extra text, preamble, or markdown:
-{
-  "name": "full customer name",
-  "phone": "phone number",
-  "email": "email address",
-  "addr": "street address only",
-  "city": "city name only",
-  "cityzip": "state and zip code e.g. TX 77001"
-}
-If a field is not found, use an empty string.` }
-          ]
-        }]
-      })
-    });
-
-    const data = await response.json();
-    if (data.error) throw new Error(data.error.message);
-
-    const raw = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const info = JSON.parse(clean);
-
-    if (info.name) document.getElementById('n-name').value = info.name;
-    if (info.phone) document.getElementById('n-phone').value = info.phone;
-    if (info.email) document.getElementById('n-email').value = info.email;
-    if (info.addr) document.getElementById('n-addr').value = info.addr;
-    if (info.city) document.getElementById('n-city').value = info.city;
-    if (info.cityzip) document.getElementById('n-zip').value = info.cityzip;
-
-    status.style.color = 'var(--success)';
-    status.textContent = '✓ Customer info extracted and filled in! Review and select a warehouse below.';
-    fileInput.value = '';
-  } catch (err) {
-    status.style.color = '#c0392b';
-    status.textContent = '✗ Error: ' + err.message;
-  }
-}
-
 function toast(msg) {
-  const t = document.getElementById('toast');
+  var t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+  setTimeout(function() { t.classList.remove('show'); }, 2800);
 }
 
 function switchTab(id) {
-  document.querySelectorAll('.nav-item').forEach((b, i) => {
-    b.classList.toggle('active', ['orders','new','warehouses','signature','apikey'][i] === id);
+  document.querySelectorAll('.nav-item[data-tab]').forEach(function(b) {
+    b.classList.toggle('active', b.getAttribute('data-tab') === id);
   });
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
   document.getElementById('tab-' + id).classList.add('active');
   if (id === 'orders') renderOrders();
   if (id === 'warehouses') renderWarehouses();
   if (id === 'signature') initSig();
   if (id === 'apikey') {
-    const stored = localStorage.getItem('eru_api_key');
+    var stored = localStorage.getItem('eru_api_key');
     if (stored) {
       document.getElementById('api-key-input').value = stored;
       document.getElementById('apikey-status').style.display = 'block';
@@ -544,91 +285,67 @@ function switchTab(id) {
 }
 
 function renderOrders() {
-  const el = document.getElementById('orders-list');
-  const total = orders.length;
-  const pending = orders.filter(o => !o.sent && !(o.vin && o.machine)).length;
-  const sent = orders.filter(o => o.sent).length;
+  var el = document.getElementById('orders-list');
+  var total = orders.length;
+  var pending = orders.filter(function(o) { return !o.sent && !(o.vin && o.machine); }).length;
+  var sent = orders.filter(function(o) { return o.sent; }).length;
   document.getElementById('stat-total').textContent = total;
   document.getElementById('stat-pending').textContent = pending;
   document.getElementById('stat-sent').textContent = sent;
 
   if (!total) {
-    el.innerHTML = '<div class="empty"><div class="empty-icon">📦</div>No orders yet.<br>Click "New order" to get started.</div>';
+    el.innerHTML = '<div class="empty"><div class="empty-icon">&#x1F4E6;</div>No orders yet.<br>Click "New order" to get started.</div>';
     return;
   }
 
-  el.innerHTML = orders.map((o, i) => {
-    const wh = WH[o.wh] || {};
-    const hasVin = o.vin && o.machine;
-    const status = o.sent ? 'sent' : hasVin ? 'ready' : 'pending';
-    const labels = { pending: 'Awaiting VIN', ready: 'Ready to send', sent: 'Sent' };
-    return `
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">${o.name}</span>
-        <span class="badge badge-${status}">${labels[status]}</span>
-      </div>
-      <div class="order-meta">${o.addr}, ${o.city} ${o.cityzip} <span>·</span> ${wh.label || '—'} <span>·</span> Added ${o.date}</div>
-      ${!hasVin ? `
-        <div class="vin-box">
-          <div class="vin-box-label">Enter machine details when warehouse confirms (2–3 days)</div>
-          <div class="grid2" style="gap:8px; margin-bottom:8px;">
-            <input type="text" placeholder="Machine name & model" id="m-${i}" value="${o.machine||''}">
-            <input type="text" placeholder="VIN number" id="v-${i}" value="${o.vin||''}">
-          </div>
-          <div style="text-align:right;">
-            <button class="btn btn-sm btn-primary" onclick="saveVin(${i})">Save details</button>
-          </div>
-        </div>` : `
-        <div style="font-size:14px; margin-bottom:12px; padding:10px 12px; background:var(--success-bg); border-radius:var(--radius); border:1px solid var(--success-border);">
-          <strong style="font-weight:600;">${o.machine}</strong> &nbsp;·&nbsp; <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">VIN: ${o.vin}</span>
-        </div>`}
-      <div class="row" style="justify-content:flex-end; gap:6px; flex-wrap:wrap;">
-        <button class="btn btn-sm" onclick="previewReceipt(${i})">Preview receipt</button>
-        ${hasVin && !o.sent ? `<button class="btn btn-sm btn-success" onclick="sendReceipt(${i})">Generate & send → ${wh.label}</button>` : ''}
-        ${o.sent ? `<span style="font-size:11px; color:var(--text3); font-family:var(--mono);">Sent ${o.sentAt}</span>` : ''}
-        <button class="btn btn-sm btn-danger" onclick="deleteOrder(${i})">Delete</button>
-      </div>
-    </div>`;
+  el.innerHTML = orders.map(function(o, i) {
+    var wh = WH[o.wh] || {};
+    var hasVin = o.vin && o.machine;
+    var status = o.sent ? 'sent' : hasVin ? 'ready' : 'pending';
+    var labels = { pending: 'Awaiting VIN', ready: 'Ready to send', sent: 'Sent' };
+    var vinHtml = !hasVin
+      ? '<div class="vin-box"><div class="vin-box-label">Enter machine details when warehouse confirms (2-3 days)</div><div class="grid2" style="gap:8px; margin-bottom:8px;"><input type="text" placeholder="Machine name &amp; model" id="m-' + i + '" value="' + (o.machine||'') + '"><input type="text" placeholder="VIN number" id="v-' + i + '" value="' + (o.vin||'') + '"></div><div style="text-align:right;"><button class="btn btn-sm btn-primary" onclick="saveVin(' + i + ')">Save details</button></div></div>'
+      : '<div style="font-size:14px; margin-bottom:12px; padding:10px 12px; background:var(--success-bg); border-radius:var(--radius); border:1px solid var(--success-border);"><strong style="font-weight:600;">' + o.machine + '</strong> &nbsp;&middot;&nbsp; <span style="font-family:var(--mono); font-size:12px; color:var(--text2);">VIN: ' + o.vin + '</span></div>';
+    var sendBtn = hasVin && !o.sent ? '<button class="btn btn-sm btn-success" onclick="sendReceipt(' + i + ')">Generate &amp; send to ' + wh.label + '</button>' : '';
+    var sentLabel = o.sent ? '<span style="font-size:11px; color:var(--text3); font-family:var(--mono);">Sent ' + o.sentAt + '</span>' : '';
+    return '<div class="card"><div class="card-header"><span class="card-title">' + o.name + '</span><span class="badge badge-' + status + '">' + labels[status] + '</span></div><div class="order-meta">' + o.addr + ', ' + o.city + ' ' + o.cityzip + ' <span>&middot;</span> ' + (wh.label||'—') + ' <span>&middot;</span> ' + o.date + '</div>' + vinHtml + '<div class="row" style="justify-content:flex-end; gap:6px; flex-wrap:wrap;"><button class="btn btn-sm" onclick="previewReceipt(' + i + ')">Preview receipt</button>' + sendBtn + sentLabel + '<button class="btn btn-sm btn-danger" onclick="deleteOrder(' + i + ')">Delete</button></div></div>';
   }).join('');
 }
 
 function renderWarehouses() {
-  document.getElementById('wh-list').innerHTML = Object.entries(WH).map(([k, w]) => `
-    <div class="wh-row">
-      <div class="wh-dot"></div>
-      <div>
-        <div class="wh-label">${w.label}</div>
-        <div class="wh-addr">${w.addr}</div>
-      </div>
-      <div class="wh-email">${w.email}</div>
-    </div>`).join('');
+  document.getElementById('wh-list').innerHTML = Object.entries(WH).map(function(entry) {
+    var w = entry[1];
+    return '<div class="wh-row"><div class="wh-dot"></div><div><div class="wh-label">' + w.label + '</div><div class="wh-addr">' + w.addr + '</div></div><div class="wh-email">' + w.email + '</div></div>';
+  }).join('');
 }
 
 function addOrder() {
-  const name = document.getElementById('n-name').value.trim();
-  const addr = document.getElementById('n-addr').value.trim();
+  var name = document.getElementById('n-name').value.trim();
+  var addr = document.getElementById('n-addr').value.trim();
   if (!name || !addr) { toast('Please fill in at least customer name and address.'); return; }
   orders.unshift({
-    name, phone: document.getElementById('n-phone').value.trim(),
+    name: name,
+    phone: document.getElementById('n-phone').value.trim(),
     email: document.getElementById('n-email').value.trim(),
-    addr, city: document.getElementById('n-city').value.trim(),
+    addr: addr,
+    city: document.getElementById('n-city').value.trim(),
     cityzip: document.getElementById('n-zip').value.trim(),
     wh: document.getElementById('n-wh').value,
     machine: document.getElementById('n-machine').value.trim(),
     vin: document.getElementById('n-vin').value.trim(),
-    date: new Date().toLocaleDateString('en-US'), sent: false
+    date: new Date().toLocaleDateString('en-US'),
+    sent: false
   });
   save();
-  ['n-name','n-phone','n-email','n-addr','n-city','n-zip','n-machine','n-vin'].forEach(id => document.getElementById(id).value = '');
+  ['n-name','n-phone','n-email','n-addr','n-city','n-zip','n-machine','n-vin'].forEach(function(id) { document.getElementById(id).value = ''; });
   document.getElementById('n-wh').value = '';
   toast('Order saved successfully.');
   switchTab('orders');
 }
 
 function saveVin(i) {
-  const m = document.getElementById('m-' + i).value.trim();
-  const v = document.getElementById('v-' + i).value.trim();
+  var m = document.getElementById('m-' + i).value.trim();
+  var v = document.getElementById('v-' + i).value.trim();
   if (!m || !v) { toast('Please enter both machine name/model and VIN.'); return; }
   orders[i].machine = m; orders[i].vin = v;
   save(); renderOrders(); toast('Machine details saved — ready to generate receipt!');
@@ -640,77 +357,53 @@ function deleteOrder(i) {
 }
 
 function buildReceiptText(o) {
-  const checked = k => o.wh === k ? '[X]' : '[ ]';
-  return `EXCAVATORS R US LLC
-Professional Equipment Resale & Nationwide Delivery
-Website: excavatorsrus.com  |  Email: info@excavatorsrus.com  |  Phone: +1 425-800-5260
-
-══════════════════════════════════════════════════════
-       EQUIPMENT ORDER & TRANSPORT AUTHORIZATION
-══════════════════════════════════════════════════════
-
-1. CUSTOMER INFORMATION
-   Customer Name : ${o.name}
-   City/State/Zip: ${o.city} ${o.cityzip}
-   Phone         : ${o.phone || '—'}
-   Email         : ${o.email || '—'}
-
-2. EQUIPMENT DETAILS
-   Machine Name & Model : ${o.machine || '___________________________'}
-   VIN Number           : ${o.vin    || '___________________________'}
-
-3. DELIVERY INFORMATION
-   Ship To Address: ${o.addr}
-   City/State/Zip : ${o.city} ${o.cityzip}
-
-4. ORIGIN / DISPATCH LOCATION
-   ${checked('kent')}  KENT, WA      – 5801 S 212th St, Kent, WA 98032
-   ${checked('santa')}  SANTA ANA, CA – 2602 S Halladay St, Santa Ana, CA 92705
-   ${checked('houston')}  HOUSTON, TX   – 4433 South Drive, Houston, TX 77053
-   ${checked('chicago')}  CHICAGO, IL   – 3429 W 47th St, Chicago, IL 60632
-
-   Authorized Signature : [Digitally signed – Excavators R Us LLC]
-   Date                 : ${o.date}
-   Printed Name         : Excavators R Us LLC
-
-──────────────────────────────────────────────────────
-OFFICE USE ONLY
-Order Date: ${o.date}  |  Rep ID: _______  |  Payment Status: _______
-══════════════════════════════════════════════════════`;
+  function checked(k) { return o.wh === k ? '[X]' : '[ ]'; }
+  return 'EXCAVATORS R US LLC\n' +
+    'Professional Equipment Resale & Nationwide Delivery\n' +
+    'Website: excavatorsrus.com  |  Email: info@excavatorsrus.com  |  Phone: +1 425-800-5260\n\n' +
+    '======================================================\n' +
+    '       EQUIPMENT ORDER & TRANSPORT AUTHORIZATION\n' +
+    '======================================================\n\n' +
+    '1. CUSTOMER INFORMATION\n' +
+    '   Customer Name : ' + o.name + '\n' +
+    '   City/State/Zip: ' + o.city + ' ' + o.cityzip + '\n' +
+    '   Phone         : ' + (o.phone || '—') + '\n' +
+    '   Email         : ' + (o.email || '—') + '\n\n' +
+    '2. EQUIPMENT DETAILS\n' +
+    '   Machine Name & Model : ' + (o.machine || '___________________________') + '\n' +
+    '   VIN Number           : ' + (o.vin    || '___________________________') + '\n\n' +
+    '3. DELIVERY INFORMATION\n' +
+    '   Ship To Address: ' + o.addr + '\n' +
+    '   City/State/Zip : ' + o.city + ' ' + o.cityzip + '\n\n' +
+    '4. ORIGIN / DISPATCH LOCATION\n' +
+    '   ' + checked('kent')    + '  KENT, WA      - 5801 S 212th St, Kent, WA 98032\n' +
+    '   ' + checked('santa')   + '  SANTA ANA, CA - 2602 S Halladay St, Santa Ana, CA 92705\n' +
+    '   ' + checked('houston') + '  HOUSTON, TX   - 4433 South Drive, Houston, TX 77053\n' +
+    '   ' + checked('chicago') + '  CHICAGO, IL   - 3429 W 47th St, Chicago, IL 60632\n\n' +
+    '   Authorized Signature : [Digitally signed - Excavators R Us LLC]\n' +
+    '   Date                 : ' + o.date + '\n' +
+    '   Printed Name         : Excavators R Us LLC\n\n' +
+    '------------------------------------------------------\n' +
+    'OFFICE USE ONLY\n' +
+    'Order Date: ' + o.date + '  |  Rep ID: _______  |  Payment Status: _______\n' +
+    '======================================================';
 }
 
 function previewReceipt(i) {
-  const o = orders[i];
-  const wh = WH[o.wh] || {};
-  document.getElementById('modal-content').innerHTML = `
-    <div class="modal-title">Receipt preview — ${o.name}</div>
-    <div class="receipt-preview">${buildReceiptText(o)}</div>
-    <div class="row" style="justify-content:flex-end; gap:8px;">
-      <button class="btn" onclick="closeModal()">Close</button>
-      ${o.vin && o.machine && !o.sent ? `<button class="btn btn-success" onclick="closeModal(); sendReceipt(${i})">Send to ${wh.label} →</button>` : ''}
-    </div>`;
+  var o = orders[i];
+  var wh = WH[o.wh] || {};
+  var sendBtn = (o.vin && o.machine && !o.sent) ? '<button class="btn btn-success" onclick="closeModal(); sendReceipt(' + i + ')">Send to ' + wh.label + '</button>' : '';
+  document.getElementById('modal-content').innerHTML = '<div class="modal-title">Receipt preview — ' + o.name + '</div><div class="receipt-preview">' + buildReceiptText(o) + '</div><div class="row" style="justify-content:flex-end; gap:8px;"><button class="btn" onclick="closeModal()">Close</button>' + sendBtn + '</div>';
   document.getElementById('modal-bg').classList.add('open');
 }
 
 function sendReceipt(i) {
-  const o = orders[i];
-  const wh = WH[o.wh] || {};
-  const body = `Hi ${wh.label} team,\n\nPlease find the delivery receipt below for the following order:\n\n${buildReceiptText(o)}\n\nKind regards,\nExcavators R Us LLC\ninfo@excavatorsrus.com | +1 425-800-5260`;
-  const subject = `Delivery Receipt – ${o.name} – ${o.machine}`;
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(wh.email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-  document.getElementById('modal-content').innerHTML = `
-    <div class="modal-title">Send receipt to ${wh.label}</div>
-    <p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">Everything is pre-filled. Gmail will open with the receipt ready — just hit Send.</p>
-    <div style="background:var(--surface2); border-radius:var(--radius); padding:12px; margin-bottom:1.25rem;">
-      <div class="send-field"><span class="send-label">To</span><span>${wh.email}</span></div>
-      <div class="send-field"><span class="send-label">Subject</span><span>Delivery Receipt – ${o.name} – ${o.machine}</span></div>
-      <div class="send-field"><span class="send-label">Content</span><span>Fully filled receipt in email body</span></div>
-    </div>
-    <div class="row" style="justify-content:flex-end; gap:8px;">
-      <button class="btn" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-accent" onclick="markSent(${i}); window.open('${gmailUrl}', '_blank')">Open Gmail & send ↗</button>
-    </div>`;
+  var o = orders[i];
+  var wh = WH[o.wh] || {};
+  var body = 'Hi ' + wh.label + ' team,\n\nPlease find the delivery receipt below:\n\n' + buildReceiptText(o) + '\n\nKind regards,\nExcavators R Us LLC\ninfo@excavatorsrus.com | +1 425-800-5260';
+  var subject = 'Delivery Receipt - ' + o.name + ' - ' + o.machine;
+  var gmailUrl = 'https://mail.google.com/mail/?view=cm&to=' + encodeURIComponent(wh.email) + '&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  document.getElementById('modal-content').innerHTML = '<div class="modal-title">Send receipt to ' + wh.label + '</div><p style="font-size:13px; color:var(--text2); margin-bottom:1rem;">Everything is pre-filled. Gmail will open with the receipt ready — just hit Send.</p><div style="background:var(--surface2); border-radius:var(--radius); padding:12px; margin-bottom:1.25rem;"><div class="send-field"><span class="send-label">To</span><span>' + wh.email + '</span></div><div class="send-field"><span class="send-label">Subject</span><span>Delivery Receipt - ' + o.name + ' - ' + o.machine + '</span></div><div class="send-field"><span class="send-label">Content</span><span>Fully filled receipt in email body</span></div></div><div class="row" style="justify-content:flex-end; gap:8px;"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-accent" onclick="markSent(' + i + '); window.open(\'' + gmailUrl + '\', \'_blank\')">Open Gmail &amp; send</button></div>';
   document.getElementById('modal-bg').classList.add('open');
 }
 
@@ -722,45 +415,128 @@ function markSent(i) {
 }
 
 function closeModal() { document.getElementById('modal-bg').classList.remove('open'); }
-document.getElementById('modal-bg').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+function saveApiKey() {
+  var key = document.getElementById('api-key-input').value.trim();
+  if (!key) { toast('Please enter your API key.'); return; }
+  localStorage.setItem('eru_api_key', key);
+  document.getElementById('apikey-status').style.display = 'block';
+  toast('API key saved!');
+}
+
+function importFromContract() {
+  var apiKey = localStorage.getItem('eru_api_key');
+  if (!apiKey) { toast('Please save your Anthropic API key first (Settings - API key).'); return; }
+  var fileInput = document.getElementById('contract-pdf');
+  if (!fileInput.files.length) { toast('Please select a PDF file first.'); return; }
+  var file = fileInput.files[0];
+  var status = document.getElementById('import-status');
+  status.style.display = 'block';
+  status.style.color = 'var(--text2)';
+  status.textContent = 'Reading contract and extracting customer info...';
+  var reader = new FileReader();
+  reader.onload = function() {
+    var base64 = reader.result.split(',')[1];
+    fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: [
+          { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: base64 } },
+          { type: 'text', text: 'Extract the following customer information from this signed contract and return ONLY a valid JSON object with no extra text or markdown:\n{"name":"full customer name","phone":"phone number","email":"email address","addr":"street address only","city":"city name only","cityzip":"state and zip e.g. TX 77001"}\nIf a field is not found, use an empty string.' }
+        ]}]
+      })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.error) throw new Error(data.error.message);
+      var raw = data.content.filter(function(b) { return b.type === 'text'; }).map(function(b) { return b.text; }).join('');
+      var info = JSON.parse(raw.replace(/```json|```/g, '').trim());
+      if (info.name)    document.getElementById('n-name').value  = info.name;
+      if (info.phone)   document.getElementById('n-phone').value = info.phone;
+      if (info.email)   document.getElementById('n-email').value = info.email;
+      if (info.addr)    document.getElementById('n-addr').value  = info.addr;
+      if (info.city)    document.getElementById('n-city').value  = info.city;
+      if (info.cityzip) document.getElementById('n-zip').value   = info.cityzip;
+      status.style.color = 'var(--success)';
+      status.textContent = 'Customer info extracted! Review below and select a warehouse.';
+      fileInput.value = '';
+    })
+    .catch(function(err) {
+      status.style.color = '#c0392b';
+      status.textContent = 'Error: ' + err.message;
+    });
+  };
+  reader.onerror = function() {
+    status.style.color = '#c0392b';
+    status.textContent = 'Error: Failed to read file.';
+  };
+  reader.readAsDataURL(file);
+}
 
 function initSig() {
-  const canvas = document.getElementById('sig-canvas');
+  var canvas = document.getElementById('sig-canvas');
   ctx = canvas.getContext('2d');
   ctx.strokeStyle = '#1A1814';
   ctx.lineWidth = 2.5;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
   if (sigData) {
-    const img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0);
+    var img = new Image();
+    img.onload = function() { ctx.drawImage(img, 0, 0); };
     img.src = sigData;
     document.getElementById('sig-status').style.display = 'block';
   }
-  canvas.addEventListener('mousedown', e => { drawing = true; [lastX, lastY] = [e.offsetX, e.offsetY]; });
-  canvas.addEventListener('mousemove', e => {
+  canvas.onmousedown = function(e) { drawing = true; lastX = e.offsetX; lastY = e.offsetY; };
+  canvas.onmousemove = function(e) {
     if (!drawing) return;
     ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
-    [lastX, lastY] = [e.offsetX, e.offsetY];
-  });
-  canvas.addEventListener('mouseup', () => drawing = false);
-  canvas.addEventListener('mouseleave', () => drawing = false);
-  canvas.addEventListener('touchstart', e => {
+    lastX = e.offsetX; lastY = e.offsetY;
+  };
+  canvas.onmouseup = function() { drawing = false; };
+  canvas.onmouseleave = function() { drawing = false; };
+  canvas.addEventListener('touchstart', function(e) {
     e.preventDefault();
-    const t = e.touches[0]; const r = canvas.getBoundingClientRect();
+    var t = e.touches[0]; var r = canvas.getBoundingClientRect();
     drawing = true; lastX = t.clientX - r.left; lastY = t.clientY - r.top;
   }, { passive: false });
-  canvas.addEventListener('touchmove', e => {
+  canvas.addEventListener('touchmove', function(e) {
     e.preventDefault();
     if (!drawing) return;
-    const t = e.touches[0]; const r = canvas.getBoundingClientRect();
-    const x = t.clientX - r.left, y = t.clientY - r.top;
+    var t = e.touches[0]; var r = canvas.getBoundingClientRect();
+    var x = t.clientX - r.left, y = t.clientY - r.top;
     ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(x, y); ctx.stroke();
     lastX = x; lastY = y;
   }, { passive: false });
-  canvas.addEventListener('touchend', () => drawing = false);
+  canvas.addEventListener('touchend', function() { drawing = false; });
 }
 
 function clearSig() { if (ctx) ctx.clearRect(0, 0, 700, 160); }
+
 function saveSig() {
-  sigData = d
+  sigData = document.getElementById('sig-canvas').toDataURL();
+  localStorage.setItem('eru_sig', sigData);
+  document.getElementById('sig-status').style.display = 'block';
+  toast('Signature saved!');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.nav-item[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() { switchTab(btn.getAttribute('data-tab')); });
+  });
+  document.getElementById('btn-save-order').addEventListener('click', addOrder);
+  document.getElementById('btn-cancel').addEventListener('click', function() { switchTab('orders'); });
+  document.getElementById('btn-import').addEventListener('click', importFromContract);
+  document.getElementById('btn-save-apikey').addEventListener('click', saveApiKey);
+  document.getElementById('btn-clear-sig').addEventListener('click', clearSig);
+  document.getElementById('btn-save-sig').addEventListener('click', saveSig);
+  document.getElementById('modal-bg').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  renderOrders();
+});
+</script>
+</body>
+</html>
