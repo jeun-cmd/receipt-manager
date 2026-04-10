@@ -77,6 +77,8 @@ input::placeholder{color:var(--text3)}
 .sv{font-size:26px;font-weight:700;margin-top:2px;letter-spacing:-.02em}
 .sv.w{color:var(--warning)}
 .sv.g{color:var(--success)}
+.step-box{background:var(--info-bg);border:1px solid var(--info-border);border-radius:var(--r);padding:12px;margin-bottom:1rem;font-size:13px;color:var(--info)}
+.step-box ol{margin-left:1.2rem;margin-top:6px;line-height:2}
 @media(max-width:640px){.layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;flex-direction:row;flex-wrap:wrap;padding:1rem;gap:1rem}.logo-area{width:100%}.nav{flex-direction:row;flex-wrap:wrap}.sidebar-footer{display:none}.main{padding:1.25rem}.g2{grid-template-columns:1fr}.stats-bar{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -190,6 +192,7 @@ input::placeholder{color:var(--text3)}
 </div>
 <div class="modal-bg" id="modal-bg"><div class="modal" id="modal-content"></div></div>
 <div class="toast" id="toast"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 var WH={kent:{label:'Kent, WA',addr:'5801 S 212th St, Kent, WA 98032',email:'kent.wa@gmail.com'},santa:{label:'Santa Ana, CA',addr:'2602 S Halladay St, Santa Ana, CA 92705',email:'santana.ca@gmail.com'},houston:{label:'Houston, TX',addr:'4433 South Drive, Houston, TX 77053',email:'houston.tx@gmail.com'},chicago:{label:'Chicago, IL',addr:'3429 W 47th St, Chicago, IL 60632',email:'chicago.il@gmail.com'}};
 var orders=JSON.parse(localStorage.getItem('eru_orders')||'[]');
@@ -224,7 +227,7 @@ function renderOrders(){
     var vinHtml=!hasVin
       ?'<div class="vb"><div class="vl">Enter machine details when warehouse confirms (2-3 days)</div><div class="g2" style="gap:8px;margin-bottom:8px"><input type="text" placeholder="Machine name &amp; model" id="m-'+i+'" value="'+(o.machine||'')+'"><input type="text" placeholder="VIN number" id="v-'+i+'" value="'+(o.vin||'')+'"></div><div style="text-align:right"><button class="btn btn-sm btn-p" onclick="saveVin('+i+')">Save details</button></div></div>'
       :'<div style="font-size:14px;margin-bottom:12px;padding:10px 12px;background:var(--success-bg);border-radius:var(--r);border:1px solid var(--success-border)"><strong>'+o.machine+'</strong> &nbsp;&middot;&nbsp; <span style="font-family:var(--mono);font-size:12px;color:var(--text2)">VIN: '+o.vin+'</span></div>';
-    var sendBtn=hasVin&&!o.sent?'<button class="btn btn-sm btn-s" onclick="sendReceipt('+i+')">Generate &amp; send &#8594; '+wh.label+'</button>':'';
+    var sendBtn=hasVin&&!o.sent?'<button class="btn btn-sm btn-s" onclick="sendReceipt('+i+')">Generate PDF &amp; send &#8594; '+wh.label+'</button>':'';
     var sentLbl=o.sent?'<span style="font-size:11px;color:var(--text3);font-family:var(--mono)">Sent '+o.sentAt+'</span>':'';
     return '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem"><span style="font-size:15px;font-weight:600">'+o.name+'</span><span class="badge '+bc+'">'+labels[status]+'</span></div><div class="om">'+o.addr+', '+o.city+' '+o.cityzip+' &middot; '+(wh.label||'&mdash;')+' &middot; '+o.date+'</div>'+vinHtml+'<div class="row" style="justify-content:flex-end;gap:6px;flex-wrap:wrap"><button class="btn btn-sm" onclick="previewReceipt('+i+')">Preview receipt</button>'+sendBtn+sentLbl+'<button class="btn btn-sm btn-d" onclick="deleteOrder('+i+')">Delete</button></div></div>';
   }).join('');
@@ -245,20 +248,150 @@ function addOrder(){
 }
 function saveVin(i){var m=document.getElementById('m-'+i).value.trim();var v=document.getElementById('v-'+i).value.trim();if(!m||!v){toast('Please enter both machine name/model and VIN.');return;}orders[i].machine=m;orders[i].vin=v;save();renderOrders();toast('Machine details saved!');}
 function deleteOrder(i){if(!confirm('Delete this order?'))return;orders.splice(i,1);save();renderOrders();}
-function buildReceipt(o){
+
+function generatePDF(o){
+  var wh=WH[o.wh]||{};
+  var doc=new window.jspdf.jsPDF({unit:'pt',format:'letter'});
+  var W=612,lm=50,rm=562,y=50;
+  function line(){doc.setDrawColor(180);doc.line(lm,y,rm,y);y+=12;}
+  function txt(text,x,size,style,color){
+    doc.setFontSize(size||11);
+    doc.setFont('helvetica',style||'normal');
+    doc.setTextColor(color||'#1A1814');
+    doc.text(text,x,y);
+  }
+  function row(label,value){
+    txt(label,lm,10,'bold','#6B6660');
+    txt(value||'—',lm+130,10,'normal','#1A1814');
+    y+=16;
+  }
   function ck(k){return o.wh===k?'[X]':'[ ]';}
-  return 'EXCAVATORS R US LLC\nProfessional Equipment Resale & Nationwide Delivery\nWebsite: excavatorsrus.com  |  Email: info@excavatorsrus.com  |  Phone: +1 425-800-5260\n\n======================================================\n       EQUIPMENT ORDER & TRANSPORT AUTHORIZATION\n======================================================\n\n1. CUSTOMER INFORMATION\n   Customer Name : '+o.name+'\n   City/State/Zip: '+o.city+' '+o.cityzip+'\n   Phone         : '+(o.phone||'—')+'\n   Email         : '+(o.email||'—')+'\n\n2. EQUIPMENT DETAILS\n   Machine Name & Model : '+(o.machine||'___________________________')+'\n   VIN Number           : '+(o.vin||'___________________________')+'\n\n3. DELIVERY INFORMATION\n   Ship To Address: '+o.addr+'\n   City/State/Zip : '+o.city+' '+o.cityzip+'\n\n4. ORIGIN / DISPATCH LOCATION\n   '+ck('kent')+'  KENT, WA      - 5801 S 212th St, Kent, WA 98032\n   '+ck('santa')+'  SANTA ANA, CA - 2602 S Halladay St, Santa Ana, CA 92705\n   '+ck('houston')+'  HOUSTON, TX   - 4433 South Drive, Houston, TX 77053\n   '+ck('chicago')+'  CHICAGO, IL   - 3429 W 47th St, Chicago, IL 60632\n\n   Authorized Signature : [Digitally signed - Excavators R Us LLC]\n   Date                 : '+o.date+'\n   Printed Name         : Excavators R Us LLC\n\n------------------------------------------------------\nOFFICE USE ONLY\nOrder Date: '+o.date+'  |  Rep ID: _______  |  Payment Status: _______\n======================================================';
+
+  // Header
+  doc.setFillColor(26,24,20);
+  doc.rect(0,0,W,70,'F');
+  doc.setFontSize(18);doc.setFont('helvetica','bold');doc.setTextColor('#FFFFFF');
+  doc.text('EXCAVATORS R US LLC',lm,30);
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor('rgba(255,255,255,0.7)');
+  doc.text('Professional Equipment Resale & Nationwide Delivery',lm,45);
+  doc.text('info@excavatorsrus.com  |  +1 425-800-5260  |  excavatorsrus.com',lm,58);
+  y=90;
+
+  // Title
+  doc.setFontSize(13);doc.setFont('helvetica','bold');doc.setTextColor('#C8440A');
+  doc.text('EQUIPMENT ORDER & TRANSPORT AUTHORIZATION',lm,y);
+  y+=8;line();y+=4;
+
+  // Section 1
+  doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor('#1A1814');
+  doc.text('1. CUSTOMER INFORMATION',lm,y);y+=18;
+  row('Customer Name',o.name);
+  row('City / State / Zip',o.city+' '+o.cityzip);
+  row('Phone',o.phone||'—');
+  row('Email',o.email||'—');
+  y+=4;line();y+=4;
+
+  // Section 2
+  doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor('#1A1814');
+  doc.text('2. EQUIPMENT DETAILS',lm,y);y+=18;
+  row('Machine Name & Model',o.machine||'___________________________');
+  row('VIN Number',o.vin||'___________________________');
+  y+=4;line();y+=4;
+
+  // Section 3
+  doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor('#1A1814');
+  doc.text('3. DELIVERY INFORMATION',lm,y);y+=18;
+  row('Ship To Address',o.addr);
+  row('City / State / Zip',o.city+' '+o.cityzip);
+  y+=4;line();y+=4;
+
+  // Section 4
+  doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor('#1A1814');
+  doc.text('4. ORIGIN / DISPATCH LOCATION',lm,y);y+=18;
+  var warehouses=[
+    {key:'kent',label:'KENT, WA',addr:'5801 S 212th St, Kent, WA 98032'},
+    {key:'santa',label:'SANTA ANA, CA',addr:'2602 S Halladay St, Santa Ana, CA 92705'},
+    {key:'houston',label:'HOUSTON, TX',addr:'4433 South Drive, Houston, TX 77053'},
+    {key:'chicago',label:'CHICAGO, IL',addr:'3429 W 47th St, Chicago, IL 60632'}
+  ];
+  warehouses.forEach(function(w){
+    var selected=o.wh===w.key;
+    if(selected){doc.setFillColor(234,245,239);doc.rect(lm-4,y-12,rm-lm+8,18,'F');}
+    doc.setFontSize(10);doc.setFont('helvetica',selected?'bold':'normal');doc.setTextColor(selected?'#1A6B3A':'#1A1814');
+    doc.text(ck(w.key)+'  '+w.label+' – '+w.addr,lm,y);
+    y+=18;
+  });
+  y+=4;line();y+=12;
+
+  // Signature
+  doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor('#1A1814');
+  doc.text('Authorized Signature:',lm,y);
+  if(sigData){
+    try{doc.addImage(sigData,'PNG',lm+120,y-20,140,30);}catch(e){}
+  } else {
+    doc.line(lm+120,y,lm+280,y);
+  }
+  doc.text('Date: '+o.date,rm-120,y);
+  y+=24;
+  doc.text('Printed Name: Excavators R Us LLC',lm,y);
+  y+=20;line();y+=10;
+
+  // Footer
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor('#9C9790');
+  doc.text('OFFICE USE ONLY   |   Order Date: '+o.date+'   |   Rep ID: _______   |   Payment Status: _______',lm,y);
+
+  return doc;
 }
-function previewReceipt(i){var o=orders[i];var wh=WH[o.wh]||{};var sb=(o.vin&&o.machine&&!o.sent)?'<button class="btn btn-s" onclick="closeModal();sendReceipt('+i+')">Send to '+wh.label+'</button>':'';document.getElementById('modal-content').innerHTML='<div class="mt">Receipt preview — '+o.name+'</div><div class="rp">'+buildReceipt(o)+'</div><div class="row" style="justify-content:flex-end;gap:8px"><button class="btn" onclick="closeModal()">Close</button>'+sb+'</div>';document.getElementById('modal-bg').classList.add('open');}
-function sendReceipt(i){
+
+function previewReceipt(i){
   var o=orders[i];var wh=WH[o.wh]||{};
-  var body='Hi '+wh.label+' team,\n\nPlease find the delivery receipt below:\n\n'+buildReceipt(o)+'\n\nKind regards,\nExcavators R Us LLC\ninfo@excavatorsrus.com | +1 425-800-5260';
-  var subject='Delivery Receipt - '+o.name+' - '+o.machine;
-  var url='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(wh.email)+'&su='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-  document.getElementById('modal-content').innerHTML='<div class="mt">Send receipt to '+wh.label+'</div><p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Everything is pre-filled. Gmail will open with the receipt ready — just hit Send.</p><div style="background:var(--surface2);border-radius:var(--r);padding:12px;margin-bottom:1.25rem"><div class="sf"><span class="sl">To</span><span>'+wh.email+'</span></div><div class="sf"><span class="sl">Subject</span><span>Delivery Receipt - '+o.name+' - '+o.machine+'</span></div><div class="sf"><span class="sl">Content</span><span>Fully filled receipt in email body</span></div></div><div class="row" style="justify-content:flex-end;gap:8px"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-a" onclick="markSent('+i+');window.open(\''+url+'\',\'_blank\')">Open Gmail &amp; send</button></div>';
+  var sb=(o.vin&&o.machine&&!o.sent)?'<button class="btn btn-s" onclick="closeModal();sendReceipt('+i+')">Generate PDF &amp; send to '+wh.label+'</button>':'';
+  var lines=['EXCAVATORS R US LLC','Professional Equipment Resale & Nationwide Delivery','','1. CUSTOMER INFORMATION','   Name    : '+o.name,'   Address : '+o.addr+', '+o.city+' '+o.cityzip,'   Phone   : '+(o.phone||'—'),'   Email   : '+(o.email||'—'),'','2. EQUIPMENT DETAILS','   Machine : '+(o.machine||'(pending)'),'   VIN     : '+(o.vin||'(pending)'),'','3. DELIVERY ADDRESS','   '+o.addr+', '+o.city+' '+o.cityzip,'','4. DISPATCH WAREHOUSE','   '+(wh.label||'(none selected)')+' – '+(wh.addr||''),'','   Date: '+o.date,'   Signed: Excavators R Us LLC'];
+  document.getElementById('modal-content').innerHTML='<div class="mt">Receipt preview — '+o.name+'</div><div class="rp">'+lines.join('\n')+'</div><div class="row" style="justify-content:flex-end;gap:8px"><button class="btn" onclick="closeModal()">Close</button>'+sb+'</div>';
   document.getElementById('modal-bg').classList.add('open');
 }
-function markSent(i){orders[i].sent=true;orders[i].sentAt=new Date().toLocaleDateString('en-US');save();closeModal();renderOrders();toast('Marked as sent!');}
+
+function sendReceipt(i){
+  var o=orders[i];var wh=WH[o.wh]||{};
+  var subject='Delivery Receipt - '+o.name+' - '+o.machine;
+  var filename='Receipt_'+o.name.replace(/\s+/g,'_')+'_'+o.machine.replace(/\s+/g,'_')+'.pdf';
+  var gmailUrl='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(wh.email)+'&su='+encodeURIComponent(subject)+'&body='+encodeURIComponent('Hi '+wh.label+' team,\n\nPlease find the attached delivery receipt for the order below.\n\nCustomer: '+o.name+'\nMachine: '+o.machine+'\nVIN: '+o.vin+'\nShip To: '+o.addr+', '+o.city+' '+o.cityzip+'\n\nKind regards,\nExcavators R Us LLC\ninfo@excavatorsrus.com | +1 425-800-5260');
+  document.getElementById('modal-content').innerHTML=
+    '<div class="mt">Generate PDF &amp; send to '+wh.label+'</div>'+
+    '<div class="step-box"><strong>How it works:</strong><ol>'+
+    '<li>Click the button below — the PDF downloads automatically</li>'+
+    '<li>Gmail opens pre-filled with the subject &amp; message</li>'+
+    '<li>Drag the downloaded PDF into the Gmail window</li>'+
+    '<li>Hit Send</li></ol></div>'+
+    '<div style="background:var(--surface2);border-radius:var(--r);padding:12px;margin-bottom:1.25rem">'+
+    '<div class="sf"><span class="sl">To</span><span>'+wh.email+'</span></div>'+
+    '<div class="sf"><span class="sl">Subject</span><span>'+subject+'</span></div>'+
+    '<div class="sf"><span class="sl">PDF file</span><span>'+filename+'</span></div>'+
+    '</div>'+
+    '<div class="row" style="justify-content:flex-end;gap:8px">'+
+    '<button class="btn" onclick="closeModal()">Cancel</button>'+
+    '<button class="btn btn-a" onclick="doSend('+i+')">Download PDF &amp; open Gmail</button>'+
+    '</div>';
+  document.getElementById('modal-bg').classList.add('open');
+}
+
+function doSend(i){
+  var o=orders[i];var wh=WH[o.wh]||{};
+  var subject='Delivery Receipt - '+o.name+' - '+o.machine;
+  var filename='Receipt_'+o.name.replace(/\s+/g,'_')+'_'+o.machine.replace(/\s+/g,'_')+'.pdf';
+  var gmailUrl='https://mail.google.com/mail/?view=cm&to='+encodeURIComponent(wh.email)+'&su='+encodeURIComponent(subject)+'&body='+encodeURIComponent('Hi '+wh.label+' team,\n\nPlease find the attached delivery receipt for the order below.\n\nCustomer: '+o.name+'\nMachine: '+o.machine+'\nVIN: '+o.vin+'\nShip To: '+o.addr+', '+o.city+' '+o.cityzip+'\n\nKind regards,\nExcavators R Us LLC\ninfo@excavatorsrus.com | +1 425-800-5260');
+  try{
+    var doc=generatePDF(o);
+    doc.save(filename);
+    setTimeout(function(){window.open(gmailUrl,'_blank');},800);
+    markSent(i);
+    toast('PDF downloaded! Attach it to the Gmail window.');
+  } catch(err){
+    toast('PDF error: '+err.message);
+  }
+}
+
+function markSent(i){orders[i].sent=true;orders[i].sentAt=new Date().toLocaleDateString('en-US');save();closeModal();renderOrders();}
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
 function saveApiKey(){var k=document.getElementById('api-key-input').value.trim();if(!k){toast('Please enter your API key.');return;}localStorage.setItem('eru_api_key',k);document.getElementById('apikey-status').style.display='block';toast('API key saved!');}
 function importFromContract(){
