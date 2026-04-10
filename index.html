@@ -99,7 +99,7 @@ input::placeholder{color:var(--text3)}
       <button class="nav-item" data-tab="signature"><span class="nav-icon">&#9997;</span> My signature</button>
       <button class="nav-item" data-tab="apikey"><span class="nav-icon">&#128273;</span> API key</button>
     </nav>
-    <div class="sidebar-footer">info@excavatorsrus.com<br>+1 425-800-5260</div>
+    <div class="sidebar-footer"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5b32353d341b3e23383a2d3a2f342928292e2875383436">[email&#160;protected]</a><br>+1 425-800-5260</div>
   </aside>
   <main class="main">
     <div id="tab-orders" class="sec on">
@@ -192,7 +192,7 @@ input::placeholder{color:var(--text3)}
 </div>
 <div class="modal-bg" id="modal-bg"><div class="modal" id="modal-content"></div></div>
 <div class="toast" id="toast"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 var WH={kent:{label:'Kent, WA',addr:'5801 S 212th St, Kent, WA 98032',email:'kent.wa@gmail.com'},santa:{label:'Santa Ana, CA',addr:'2602 S Halladay St, Santa Ana, CA 92705',email:'santana.ca@gmail.com'},houston:{label:'Houston, TX',addr:'4433 South Drive, Houston, TX 77053',email:'houston.tx@gmail.com'},chicago:{label:'Chicago, IL',addr:'3429 W 47th St, Chicago, IL 60632',email:'chicago.il@gmail.com'}};
 var orders=JSON.parse(localStorage.getItem('eru_orders')||'[]');
@@ -252,93 +252,134 @@ function deleteOrder(i){if(!confirm('Delete this order?'))return;orders.splice(i
 function generatePDF(o){
   var wh=WH[o.wh]||{};
   var doc=new window.jspdf.jsPDF({unit:'pt',format:'letter'});
-  var W=612,lm=50,rm=562,y=50;
-  function line(){doc.setDrawColor(180);doc.line(lm,y,rm,y);y+=12;}
-  function txt(text,x,size,style,color){
-    doc.setFontSize(size||11);
-    doc.setFont('helvetica',style||'normal');
-    doc.setTextColor(color||'#1A1814');
-    doc.text(text,x,y);
-  }
-  function row(label,value){
-    txt(label,lm,10,'bold','#6B6660');
-    txt(value||'—',lm+130,10,'normal','#1A1814');
-    y+=16;
-  }
+  var lm=50,rm=562,cw=512,y=0;
   function ck(k){return o.wh===k?'[X]':'[ ]';}
+  function hline(yy,w){doc.setDrawColor(0);doc.setLineWidth(0.5);doc.line(lm,yy,w||rm,yy);}
+  function field(label,value,x,fw,yy){
+    var fy=yy||y;
+    doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor(0);
+    doc.text(label,x,fy);
+    hline(fy+3,x+fw);
+    if(value){doc.setFont('helvetica','normal');doc.text(value,x,fy);}
+  }
 
-  // Header
-  doc.setFillColor(26,24,20);
-  doc.rect(0,0,W,70,'F');
-  doc.setFontSize(18);doc.setFont('helvetica','bold');doc.setTextColor('#FFFFFF');
-  doc.text('EXCAVATORS R US LLC',lm,30);
-  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor('rgba(255,255,255,0.7)');
-  doc.text('Professional Equipment Resale & Nationwide Delivery',lm,45);
-  doc.text('info@excavatorsrus.com  |  +1 425-800-5260  |  excavatorsrus.com',lm,58);
-  y=90;
+  // ── HEADER ──────────────────────────────────────────────
+  doc.setFontSize(16);doc.setFont('helvetica','bold');doc.setTextColor(0);
+  doc.text('EXCAVATORS R US LLC',lm,38);
+  doc.setFontSize(10);doc.setFont('helvetica','normal');
+  doc.text('Professional Equipment Resale & Nationwide Delivery',lm,52);
+  doc.setFontSize(9);
+  doc.text('*Website:  |  Email: info@excavatorsrus.com  |  Phone: +1 425-800-5260',lm,63);
+  hline(70);
 
-  // Title
-  doc.setFontSize(13);doc.setFont('helvetica','bold');doc.setTextColor('#C8440A');
-  doc.text('EQUIPMENT ORDER & TRANSPORT AUTHORIZATION',lm,y);
-  y+=8;line();y+=4;
+  // ── TITLE ───────────────────────────────────────────────
+  doc.setFontSize(12);doc.setFont('helvetica','bold');doc.setTextColor(0);
+  doc.text('EQUIPMENT ORDER & TRANSPORT AUTHORIZATION',lm,84);
+  hline(88);
 
-  // Section 1
-  doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor('#1A1814');
-  doc.text('1. CUSTOMER INFORMATION',lm,y);y+=18;
-  row('Customer Name',o.name);
-  row('City / State / Zip',o.city+' '+o.cityzip);
-  row('Phone',o.phone||'—');
-  row('Email',o.email||'—');
-  y+=4;line();y+=4;
+  // ── SECTION 1 ───────────────────────────────────────────
+  y=102;
+  doc.setFontSize(10);doc.setFont('helvetica','bold');
+  doc.text('1. CUSTOMER INFORMATION',lm,y);
+  y+=14;
 
-  // Section 2
-  doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor('#1A1814');
-  doc.text('2. EQUIPMENT DETAILS',lm,y);y+=18;
-  row('Machine Name & Model',o.machine||'___________________________');
-  row('VIN Number',o.vin||'___________________________');
-  y+=4;line();y+=4;
+  doc.setFont('helvetica','normal');
+  doc.text('Customer Name:',lm,y);
+  hline(y+2,rm);
+  doc.text(o.name||'',lm+90,y);
+  y+=18;
 
-  // Section 3
-  doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor('#1A1814');
-  doc.text('3. DELIVERY INFORMATION',lm,y);y+=18;
-  row('Ship To Address',o.addr);
-  row('City / State / Zip',o.city+' '+o.cityzip);
-  y+=4;line();y+=4;
+  doc.text('City/State/Zip:',lm,y);
+  hline(y+2,rm);
+  doc.text((o.city||'')+' '+(o.cityzip||''),lm+90,y);
+  y+=18;
 
-  // Section 4
-  doc.setFontSize(11);doc.setFont('helvetica','bold');doc.setTextColor('#1A1814');
-  doc.text('4. ORIGIN / DISPATCH LOCATION',lm,y);y+=18;
-  var warehouses=[
-    {key:'kent',label:'KENT, WA',addr:'5801 S 212th St, Kent, WA 98032'},
-    {key:'santa',label:'SANTA ANA, CA',addr:'2602 S Halladay St, Santa Ana, CA 92705'},
-    {key:'houston',label:'HOUSTON, TX',addr:'4433 South Drive, Houston, TX 77053'},
-    {key:'chicago',label:'CHICAGO, IL',addr:'3429 W 47th St, Chicago, IL 60632'}
+  doc.text('Phone:',lm,y);
+  hline(y+2,lm+160);
+  doc.text(o.phone||'',lm+40,y);
+  doc.text('Email:',lm+175,y);
+  hline(y+2,rm);
+  doc.text(o.email||'',lm+210,y);
+  y+=20;hline(y);
+
+  // ── SECTION 2 ───────────────────────────────────────────
+  y+=12;
+  doc.setFont('helvetica','bold');
+  doc.text('2. EQUIPMENT DETAILS',lm,y);
+  y+=14;
+
+  doc.setFont('helvetica','normal');
+  doc.text('Machine Name & Model:',lm,y);
+  hline(y+2,rm);
+  doc.text(o.machine||'',lm+130,y);
+  y+=18;
+
+  doc.text('VIN Number:',lm,y);
+  hline(y+2,rm);
+  doc.text(o.vin||'',lm+70,y);
+  y+=20;hline(y);
+
+  // ── SECTION 3 ───────────────────────────────────────────
+  y+=12;
+  doc.setFont('helvetica','bold');
+  doc.text('3. DELIVERY INFORMATION',lm,y);
+  y+=14;
+
+  doc.setFont('helvetica','normal');
+  doc.text('Ship To Address:',lm,y);
+  hline(y+2,rm);
+  doc.text(o.addr||'',lm+100,y);
+  y+=18;
+
+  doc.text('City/State/Zip:',lm,y);
+  hline(y+2,rm);
+  doc.text((o.city||'')+' '+(o.cityzip||''),lm+90,y);
+  y+=20;hline(y);
+
+  // ── SECTION 4 ───────────────────────────────────────────
+  y+=12;
+  doc.setFont('helvetica','bold');
+  doc.text('4. ORIGIN / DISPATCH LOCATION',lm,y);
+  y+=10;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);
+  doc.text('Please select the facility from which the unit is being dispatched:',lm,y);
+  y+=14;
+
+  var whs=[
+    {key:'kent',   txt:'KENT, WA – 5801 S 212th St, Kent, WA 98032'},
+    {key:'santa',  txt:'SANTA ANA, CA – 2602 S Halladay St, Santa Ana, CA 92705'},
+    {key:'houston',txt:'HOUSTON, TX – 4433 South Drive, Houston, TX 77053'},
+    {key:'chicago',txt:'CHICAGO, IL – 3429 W 47th St, Chicago, IL 60632'}
   ];
-  warehouses.forEach(function(w){
-    var selected=o.wh===w.key;
-    if(selected){doc.setFillColor(234,245,239);doc.rect(lm-4,y-12,rm-lm+8,18,'F');}
-    doc.setFontSize(10);doc.setFont('helvetica',selected?'bold':'normal');doc.setTextColor(selected?'#1A6B3A':'#1A1814');
-    doc.text(ck(w.key)+'  '+w.label+' – '+w.addr,lm,y);
-    y+=18;
+  doc.setFontSize(10);
+  whs.forEach(function(w){
+    var sel=o.wh===w.key;
+    doc.setFont('helvetica',sel?'bold':'normal');
+    doc.text(ck(w.key)+' '+w.txt,lm,y);
+    y+=16;
   });
-  y+=4;line();y+=12;
+  y+=6;hline(y);
 
-  // Signature
-  doc.setFontSize(10);doc.setFont('helvetica','normal');doc.setTextColor('#1A1814');
+  // ── SIGNATURE ───────────────────────────────────────────
+  y+=14;
+  doc.setFont('helvetica','normal');doc.setFontSize(10);
   doc.text('Authorized Signature:',lm,y);
   if(sigData){
-    try{doc.addImage(sigData,'PNG',lm+120,y-20,140,30);}catch(e){}
+    try{doc.addImage(sigData,'PNG',lm+130,y-22,150,28);}catch(e){hline(y,lm+310);}
   } else {
-    doc.line(lm+120,y,lm+280,y);
+    hline(y,lm+310);
   }
-  doc.text('Date: '+o.date,rm-120,y);
-  y+=24;
-  doc.text('Printed Name: Excavators R Us LLC',lm,y);
-  y+=20;line();y+=10;
+  doc.text('Date: '+o.date,rm-110,y);
+  y+=18;
+  doc.text('Printed Name:',lm,y);
+  hline(y+2,rm-120);
+  doc.text('Excavators R Us LLC',lm+82,y);
+  y+=20;hline(y);
 
-  // Footer
-  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor('#9C9790');
-  doc.text('OFFICE USE ONLY   |   Order Date: '+o.date+'   |   Rep ID: _______   |   Payment Status: _______',lm,y);
+  // ── FOOTER ──────────────────────────────────────────────
+  y+=10;
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(100);
+  doc.text('OFFICE USE ONLY   Order Date: '+o.date+'  |  Rep ID: _________  |  Payment Status: _______',lm,y);
 
   return doc;
 }
